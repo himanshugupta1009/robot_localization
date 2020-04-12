@@ -44,23 +44,20 @@ C = np.array([
 
 D = 0
 
+Ga = np.eye(6)
+
 ## discretize system
 
-Ahat = np.hstack((A,B))
-Ahat = np.concatenate((Ahat, np.zeros((4,10)) ))
+F = np.eye(6) + dt*A
 
-eat = sp.expm(Ahat*dt)
-
-F = eat[0:6,0:6]
-
-G = eat[0:6,-4:]
+G = dt*B
 
 H = C
 
 M = D
 
 ## Noise Matrices
-W = np.eye(6) #multiply by process noise vector
+Om = dt*Ga #multiply by process noise vector
 
 V = np.eye(5) #multiply by measurement noise vector
 
