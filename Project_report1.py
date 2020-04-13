@@ -15,6 +15,10 @@ import scipy.linalg as sp
 L = 0.5
 dt = 0.1
 
+x0 = np.transpose(np.array([10,0,np.pi/2, 60,0,-np.pi/2
+        
+        ]))
+
 ##Initialize linearized CT system
 
 A = np.array([
@@ -63,3 +67,33 @@ V = np.eye(5) #multiply by measurement noise vector
 
 ##we do not yet have information to calculate Rd or Qd for kalman filtering.
 
+## Observability of the system
+
+#construct observability gramian
+temp = H
+
+O_ = temp
+
+for i in range(0,5):
+    temp = np.matmul(temp,F)
+    O_ = np.concatenate((O_, temp))
+
+#print the rank of the observability gramian
+print (np.linalg.matrix_rank(O_))
+
+## Stability 
+eigs = np.linalg.eig(F)
+print (max(eigs[0]))
+    
+#construct nxnr matrix, curlyC
+    
+temp = G
+
+curlyC = temp
+
+for i in range(0,5):
+    temp= np.matmul(F,G)
+    curlyC = np.hstack((curlyC, temp))
+
+#print the rank of curlyC
+print (np.linalg.matrix_rank(np.transpose(curlyC)))
